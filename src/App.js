@@ -12,8 +12,10 @@ const cardImages = [
 ]
 
 function App() {
-  const [cards, setCards] = useState([])
-  const [turns, setTurns] = useState(0)
+  const [cards, setCards] = useState([]);
+  const [turns, setTurns] = useState(0);
+  const [choiceOne, setChoiceOne] = useState(null);
+  const [choiceTwo, setChoiceTwo] = useState(null);
 
   // shuffle cards for new game
   const shuffleCards = () => {
@@ -25,15 +27,23 @@ function App() {
     setTurns(0)
   }
 
-  console.log(cards)
+  // Handle a user's choice. Determines which choice was used. 
+  const handleChoice = (card) => {
+    choiceOne ? setChoiceTwo(card) : setChoiceOne(card)
+  }
 
   return (
     <div className="App">
       <h1>Magic Match</h1>
       <button onClick={shuffleCards}>New Game</button>
 
+      {/* Creates a grid of cards via SingleCard component */}
       <div className="card-grid">
-        {cards.map(card => <SingleCard card={card}  key={card.id}/>)}
+        {cards.map(card => ( <SingleCard 
+        card={card}  
+        key={card.id} 
+        handleChoice={handleChoice}
+        />))}
       </div>
     </div>
   );
