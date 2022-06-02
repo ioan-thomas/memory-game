@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState} from 'react'
 import './App.css'
 import SingleCard from './components/SingleCard'
 
 const cardImages = [
-  { "src": "/img/helmet-1.png" },
-  { "src": "/img/potion-1.png" },
-  { "src": "/img/ring-1.png" },
-  { "src": "/img/scroll-1.png" },
-  { "src": "/img/shield-1.png" },
-  { "src": "/img/sword-1.png" },
+  { "src": "/img/helmet-1.png", matched: false },
+  { "src": "/img/potion-1.png", matched: false },
+  { "src": "/img/ring-1.png", matched: false },
+  { "src": "/img/scroll-1.png", matched: false }, 
+  { "src": "/img/shield-1.png", matched: false },
+  { "src": "/img/sword-1.png", matched: false },
 ]
 
 function App() {
@@ -43,14 +43,26 @@ function App() {
   // Compares the two selected cards, and resets game
   useEffect(() => {
     if (choiceOne && choiceTwo){
+
       if (choiceOne.src === choiceTwo.src){
         console.log("Cards match")
-      } else {
+        setCards(prevCards => {
+          return prevCards.map(card => {
+            if (card.src === choiceOne.src){
+              return {...card, matched: true}
+            } else {
+              return card;
+            }
+          })
+        })
+      } else{
         console.log("Cards don't match")
-      };
-      resetTurn()
+      }
+      setTimeout(() => resetTurn(), 1000)
     }
-  }, [choiceOne, choiceTwo])
+  }, [choiceOne, choiceTwo]);
+
+  console.log(cards)
 
   return (
     <div className="App">
@@ -63,6 +75,7 @@ function App() {
         card={card}  
         key={card.id} 
         handleChoice={handleChoice}
+        flipped={card === choiceOne || card === choiceTwo || card.matched}
         />))}
       </div>
     </div>
